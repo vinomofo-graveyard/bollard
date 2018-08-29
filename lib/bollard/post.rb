@@ -1,7 +1,14 @@
 require 'rest-client'
 
 module Bollard
-  PostError = Class.new(RuntimeError)
+  class PostError < RuntimeError
+    attr_reader :response
+
+    def initialize(message, response: nil)
+      @response = response
+      super(message)
+    end
+  end
 
   class Post
     def initialize(url, payload, signing_secret, extra_headers, auth_header)
@@ -15,7 +22,7 @@ module Bollard
     def perform
       RestClient.post(@url, @payload, headers)
     rescue RestClient::ExceptionWithResponse => e
-      raise PostError.new(e.response.body)
+      raise PostError.new(e.response.body, response: e.response)
     rescue RestClient::Exception => e
       raise PostError.new(e.message)
     end
