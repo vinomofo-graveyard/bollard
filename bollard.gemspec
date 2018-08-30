@@ -18,11 +18,9 @@ Gem::Specification.new do |s|
   s.test_files  = `git ls-files -- {spec,gemfiles}/*`.split("\n")
 
   s.add_dependency "jwt"
-  s.add_dependency "rest-client"
 
   s.add_development_dependency "activesupport", ">= 3.1"
   s.add_development_dependency "rspec", "~> 3.7"
-  s.add_development_dependency "webmock", "~> 2.3"
   s.add_development_dependency "byebug"
   s.add_development_dependency "rake"
 end

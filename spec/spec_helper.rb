@@ -1,7 +1,6 @@
 require 'byebug'
 require 'active_support/testing/time_helpers'
 
-require 'webmock/rspec'
 require File.expand_path('../../lib/bollard', __FILE__)
 Dir[File.expand_path('../spec/support/**/*.rb', __FILE__)].each { |f| require f }
 

@@ -1,14 +1,31 @@
+require 'bollard/version'
+require 'bollard/token'
 require 'bollard/signature'
-require 'bollard/post'
 
-module Bollard
-  def self.secure_post(url, payload, signing_secret, extra_headers: {}, auth_header: 'Bollard-Signature')
-    post = Post.new(url, payload, signing_secret, extra_headers, auth_header)
-    post.perform
+require 'securerandom'
+
+class Bollard
+  def self.generate_secret(length: 32)
+    SecureRandom.hex((length / 2.0).ceil)[0...length]
   end
 
 
-  def self.verify_post(payload, header, signing_secret, tolerance: nil)
-    Signature.verify(payload, header, signing_secret, tolerance: tolerance)
+  def initialize(signing_secret)
+    @signing_secret = signing_secret
   end
+
+
+  def generate_token(payload, **args)
+    Token.generate(payload, signing_secret, **args)
+  end
+
+
+  def verify_payload(payload, token, **args)
+    Token.new(token, signing_secret).verify_payload(payload, **args)
+  end
+
+
+  private
+
+  attr_reader :signing_secret
 end
